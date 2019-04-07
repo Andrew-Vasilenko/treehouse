@@ -1,19 +1,21 @@
 var Profile = require("./profile.js");
+var renderer = require("./renderer.js");
 
-function home(request,responce){
+function home(request,response){
 	if (request.url === '/'){
-		responce.writeHead(200, {'Content-Type' : 'text/plain'});
-		responce.write("Header\n");
-		responce.write("Search\n");
-		responce.end("Footer\n");
+		response.writeHead(200, {'Content-Type' : 'text/plain'});
+		renderer.view('header', {}, response);
+		renderer.view('search', {}, response);
+		renderer.view('footer', {}, response);
+		response.end();
 	}
 };
 
-function user(request,responce){
+function user(request,response){
 	var username = request.url.replace('/','');
 	if (username.length > 0){
-		responce.writeHead(200, {'Content-Type' : 'text/plain'});
-		responce.write("Header\n");
+		response.writeHead(200, {'Content-Type' : 'text/plain'});
+		renderer.view('header', {}, response);
 		//get JSON from the treehouse
 		var studentProfile = new Profile(username);
 		//on "end"
@@ -27,15 +29,17 @@ function user(request,responce){
 				badges : profileJSON.badges.length,
 				javascriptPoints : profileJSON.points['JavaScript']
 			};
-			//responce
-			responce.write(values.username + " has " + values.badges + " badges and " + values.javascriptPoints + " of JS points\n");
-			responce.end("Footer\n");
+			//response
+			renderer.view('profile', values, response);
+			renderer.view('search', {}, response);
+			renderer.view('footer', {}, response);
+			response.end();
 		});
 		//on "error"
 		studentProfile.on("error", function(error){
-			console.log("Error: ", error);
-			responce.write("An error occured: " + error + "\n");
-			responce.end("Footer\n");
+			renderer.view('error', {errorMessage : error.Message}, response);
+			renderer.view('footer', {}, response);
+			response.end();
 		});
 	}
 }
