@@ -28,7 +28,7 @@ function user(request,responce){
 				javascriptPoints : profileJSON.points['JavaScript']
 			};
 			//responce
-			responce.write(values.username + " has " + values.badges + " badges and " + values.javascriptPoints + "of JS points\n");
+			responce.write(values.username + " has " + values.badges + " badges and " + values.javascriptPoints + " of JS points\n");
 			responce.end("Footer\n");
 		});
 		//on "error"
