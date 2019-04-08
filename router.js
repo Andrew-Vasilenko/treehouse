@@ -1,9 +1,11 @@
 var Profile = require("./profile.js");
 var renderer = require("./renderer.js");
 
+var commonHeaders = {'Content-Type' : 'text/html'};
+
 function home(request,response){
 	if (request.url === '/'){
-		response.writeHead(200, {'Content-Type' : 'text/plain'});
+		response.writeHead(200, commonHeaders);
 		renderer.view('header', {}, response);
 		renderer.view('search', {}, response);
 		renderer.view('footer', {}, response);
@@ -14,7 +16,7 @@ function home(request,response){
 function user(request,response){
 	var username = request.url.replace('/','');
 	if (username.length > 0){
-		response.writeHead(200, {'Content-Type' : 'text/plain'});
+		response.writeHead(200, commonHeaders);
 		renderer.view('header', {}, response);
 		//get JSON from the treehouse
 		var studentProfile = new Profile(username);
@@ -39,7 +41,8 @@ function user(request,response){
 		});
 		//on "error"
 		studentProfile.on("error", function(error){
-			renderer.view('error', {errorMessage : error.Message}, response);
+			renderer.view('error', {errorMessage : error.message}, response);
+			renderer.view('search', {}, response);
 			renderer.view('footer', {}, response);
 			response.end();
 		});
