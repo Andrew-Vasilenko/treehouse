@@ -1,15 +1,29 @@
 var Profile = require("./profile.js");
 var renderer = require("./renderer.js");
+var querystring = require('querystring');
 
 var commonHeaders = {'Content-Type' : 'text/html'};
 
 function home(request,response){
 	if (request.url === '/'){
-		response.writeHead(200, commonHeaders);
-		renderer.view('header', {}, response);
-		renderer.view('search', {}, response);
-		renderer.view('footer', {}, response);
-		response.end();
+		if (request.method.toLowerCase() === 'get'){
+			response.writeHead(200, commonHeaders);
+			renderer.view('header', {}, response);
+			renderer.view('search', {}, response);
+			renderer.view('footer', {}, response);
+			response.end();
+		} else {
+			//if url == '/' && method == 'POST'
+
+			//get the post data from body
+			request.on("data", function(data){
+				data = querystring.parse(data.toString());
+				console.log(data.username);
+			});
+			//extract the username
+
+			//redirect to /:username
+		}
 	}
 };
 
