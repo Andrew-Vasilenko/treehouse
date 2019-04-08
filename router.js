@@ -21,14 +21,16 @@ function user(request,response){
 		//on "end"
 		studentProfile.on("end", function(profileJSON){
 			//show profile
-
+			// console.log(profileJSON);
 			//store the valuse which we need
 			var values = {
-				avatarUrl : profileJSON.gravatar_url,
-				username : profileJSON.profile_name,
-				badges : profileJSON.badges.length,
-				javascriptPoints : profileJSON.points['JavaScript']
-			};
+				'avatarUrl' : profileJSON.gravatar_url,
+				'username' : profileJSON.profile_name,
+				'badges' : profileJSON.badges.length,
+				'javascriptPoints' : profileJSON.points['JavaScript']
+			}
+
+			// console.log(values);
 			//response
 			renderer.view('profile', values, response);
 			renderer.view('search', {}, response);
