@@ -19,6 +19,8 @@ function home(request,response){
 			request.on("data", function(data){
 				data = querystring.parse(data.toString());
 				console.log(data.username);
+				response.writeHead(303, {"Location" : "/" + data.username});
+				response.end();
 			});
 			//extract the username
 
@@ -49,7 +51,6 @@ function user(request,response){
 			// console.log(values);
 			//response
 			renderer.view('profile', values, response);
-			renderer.view('search', {}, response);
 			renderer.view('footer', {}, response);
 			response.end();
 		});
